@@ -1,0 +1,3094 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Método ARTE – Fotografia com Celular</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f0f0f'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Montserrat%2C sans-serif' font-size='13' font-weight='700' fill='%23f0ece4' letter-spacing='0.5'%3EMA%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+/* ── sessão 01 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;
+  --bg2:#161616;
+  --gold:#c9a96e;
+  --gold2:#e8d5b0;
+  --gold-dim:rgba(201,169,110,0.15);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --border:rgba(201,169,110,0.12);
+  --f:'Montserrat',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:99;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px 24px;
+  background:rgba(15,15,15,0.9);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo img{
+  height:36px;
+  display:block;
+}
+/* fallback enquanto a imagem não existe */
+.nav-logo-placeholder{
+  font-size:13px;font-weight:700;letter-spacing:5px;
+  text-transform:uppercase;color:var(--gold);
+  font-style:italic;
+}
+
+/* HERO */
+#hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:130px 48px 90px;
+}
+
+.hero-headline{
+  font-size:clamp(40px,7vw,80px);
+  font-weight:800;
+  line-height:1.08;
+  letter-spacing:-2px;
+  color:var(--white);
+  margin-bottom:28px;
+}
+.hero-headline em{
+  font-style:italic;
+  font-weight:300;
+  color:var(--gold);
+}
+
+.hero-sub{
+  font-size:clamp(15px,2vw,18px);
+  font-weight:300;
+  line-height:1.8;
+  color:var(--muted);
+  max-width:580px;
+  margin:0 auto 16px;
+}
+
+.hero-gallery-label{
+  font-size:16px;
+  font-weight:500;
+  letter-spacing:.5px;
+  color:var(--gold);
+  margin-bottom:24px;
+}
+
+/* SLIDER */
+.slider-wrap{
+  width:100%;
+  max-width:900px;
+  margin:0 auto 48px;
+  position:relative;
+  overflow:hidden;
+  border-radius:6px;
+}
+.slider-track{
+  display:flex;
+  transition:transform .7s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.slide{
+  min-width:calc(100% / 3);
+  aspect-ratio:2/3;
+  flex-shrink:0;
+  background:var(--bg2);
+  border:1px solid rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:10px;
+  color:rgba(255,255,255,0.18);
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+}
+.slide svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.5;opacity:.5}
+
+/* dots */
+.slider-dots{
+  display:flex;align-items:center;justify-content:center;
+  gap:8px;margin-bottom:40px;
+}
+.dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(201,169,110,0.25);
+  transition:background .3s,transform .3s;
+  cursor:pointer;
+}
+.dot.active{background:#f5a623;transform:scale(1.3)}
+
+/* SETAS DO SLIDER HERO */
+.slider-arrow{
+  position:absolute;top:50%;z-index:10;
+  transform:translateY(-50%);
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(15,15,15,0.75);
+  border:1px solid rgba(201,169,110,0.35);
+  color:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:background .2s,border-color .2s,opacity .2s;
+  padding:0;
+}
+.slider-arrow svg{width:18px;height:18px;flex-shrink:0}
+.slider-arrow:hover{background:rgba(201,169,110,0.15);border-color:var(--gold)}
+.slider-arrow--prev{left:10px}
+.slider-arrow--next{right:10px}
+.slider-arrow:disabled{opacity:.25;pointer-events:none}
+
+/* CTA */
+.btn-gold{ /* vibrante */ 
+  display:inline-block;
+  font-family:var(--f);
+  font-size:12px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;
+  text-decoration:none;
+  color:var(--bg);background:#f5a623;
+  padding:18px 24px;border-radius:4px;
+  transition:opacity .2s,transform .15s;
+  border:none;cursor:pointer;
+}
+.btn-gold:hover{opacity:.85;transform:translateY(-1px)}
+
+@media(max-width:600px){
+  nav{padding:16px 20px}
+  #hero{padding:100px 20px 70px}
+  .slide{min-width:80%}
+}
+
+/* ── sessão 02 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1e1e1e;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.15);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --border:rgba(201,169,110,0.12);
+  --border2:rgba(255,255,255,0.07);
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#trust{
+  padding:72px 24px;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+
+.trust-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  max-width:960px;
+  margin:0 auto;
+}
+
+.trust-item{
+  display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:8px 44px;
+  border-right:1px solid var(--border2);
+}
+.trust-item:last-child{border-right:none}
+
+.trust-ico{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--gold-dim);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;
+}
+.trust-ico svg{
+  width:22px;height:22px;
+  stroke:var(--gold);fill:none;stroke-width:1.5;
+}
+
+.trust-t{
+  font-size:12px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--white);margin-bottom:10px;
+}
+
+.trust-d{
+  font-size:14px;font-weight:300;
+  color:var(--muted);line-height:1.7;
+  max-width:220px;
+}
+
+@media(max-width:680px){
+  #trust{padding:48px 20px}
+  .trust-grid{grid-template-columns:1fr}
+  .trust-item{border-right:none;border-bottom:1px solid var(--border2);padding:28px 20px}
+  .trust-item:last-child{border-bottom:none}
+}
+
+/* ── sessão 03 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.15);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --border:rgba(201,169,110,0.12);
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#oque{
+  padding:70px 24px;
+  text-align:center;
+}
+
+.wrap{
+  max-width:680px;
+  margin:0 auto;
+}
+
+.tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--gold);
+  border:1px solid var(--gold-dim);
+  padding:6px 16px;border-radius:3px;
+  margin-bottom:32px;
+}
+.tag::before{content:'';display:block;width:5px;height:5px;border-radius:50%;background:#f5a623}
+
+h2{
+  font-size:clamp(28px,4vw,44px);
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-1px;
+  color:var(--white);
+  margin-bottom:48px;
+}
+h2 em{
+  font-style:italic;
+  font-weight:300;
+  color:var(--gold);
+}
+
+.divider{
+  width:40px;height:2px;
+  background:#f5a623;
+  margin:36px auto;
+}
+
+p{
+  font-size:17px;
+  font-weight:300;
+  line-height:1.85;
+  color:var(--muted);
+  margin-bottom:22px;
+}
+p:last-child{margin-bottom:0}
+p strong{font-weight:600;color:var(--white)}
+
+@media(max-width:600px){
+  #oque{padding:72px 24px}
+}
+
+/* ── sessão 04 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1e1e1e;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.12);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#paraquem{
+  padding:70px 24px 70px;
+  text-align:center;
+}
+
+.wrap{max-width:960px;margin:0 auto}
+
+h2{
+  font-size:clamp(28px,4vw,46px);
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-1px;
+  color:var(--white);
+  margin-bottom:64px;
+}
+h2 em{font-style:italic;font-weight:300;color:var(--gold)}
+
+.pq-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:var(--gold-dim);
+  border:1px solid var(--gold-dim);
+  border-radius:6px;
+  overflow:hidden;
+  margin-bottom:64px;
+}
+
+.pq-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  padding:24px 18px 20px;
+  background:var(--bg);
+  transition:background .2s;
+}
+.pq-item:hover{background:#232323}
+
+.pq-num{
+  font-size:32px;
+  font-weight:800;
+  font-style:italic;
+  line-height:1;
+  letter-spacing:-1px;
+  color:var(--gold);
+  opacity:.3;
+  margin-bottom:16px;
+  transition:opacity .25s;
+}
+.pq-item:hover .pq-num{opacity:.6}
+
+.pq-text{
+  font-size:13px;
+  font-weight:400;
+  line-height:1.65;
+  color:rgba(240,236,228,.7);
+}
+
+.btn-gold{ /* vibrante */ 
+  display:inline-block;
+  font-family:var(--f);
+  font-size:12px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;
+  text-decoration:none;
+  color:#0f0f0f;background:#f5a623;
+  padding:18px 24px;border-radius:4px;
+  transition:opacity .2s,transform .15s;
+}
+.btn-gold:hover{opacity:.85;transform:translateY(-1px)}
+
+@media(max-width:680px){
+  #paraquem{padding:72px 20px 80px}
+  .pq-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:380px){
+  .pq-grid{grid-template-columns:1fr}
+}
+
+/* ── sessão 05 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.12);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --border:rgba(255,255,255,0.06);
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#depoimentos{padding:100px 0 110px;text-align:center;overflow:hidden}
+
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+h2{
+  font-size:clamp(28px,4vw,46px);
+  font-weight:800;line-height:1.1;letter-spacing:-1px;
+  color:var(--white);margin-bottom:64px;
+}
+h2 em{font-style:italic;font-weight:300;color:var(--gold)}
+
+/* CARROSSEL */
+.carousel-outer{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+}
+
+.carousel-track{
+  display:flex;
+  gap:20px;
+  transition:transform .6s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+  padding:0 24px;
+}
+
+.dep-card{
+  min-width:calc(33.333% - 14px);
+  background:#161616;
+  border:1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+  text-align:left;
+  flex-shrink:0;
+  transition:border-color .2s;
+}
+.dep-card:hover{border-color:var(--gold-dim)}
+
+.dep-img{
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  display:block;
+  background:#1e1e1e;
+  position:relative;
+}
+.dep-img-placeholder{
+  width:100%;aspect-ratio:1/1;
+  background:#1c1c1c;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:10px;
+}
+.dep-img-placeholder svg{width:28px;height:28px;stroke:#444;fill:none;stroke-width:1.5}
+.dep-img-placeholder span{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#444}
+
+.dep-body{padding:20px}
+.dep-name{font-size:13px;font-weight:700;letter-spacing:.5px;color:#f5a623;margin-bottom:4px;text-align:left;}
+.dep-label{
+  font-size:11px;font-weight:400;
+  color:var(--gold);opacity:.7;
+  margin-bottom:12px;letter-spacing:.5px;
+}
+.dep-text{
+  font-size:13px;font-weight:300;
+  line-height:1.7;color:rgba(240,236,228,.65);
+}
+
+/* CONTROLES */
+.carousel-controls{
+  display:flex;align-items:center;justify-content:center;
+  gap:16px;margin-top:40px;
+}
+
+.carousel-btn{
+  width:40px;height:40px;border-radius:50%;
+  background:transparent;
+  border:1px solid rgba(201,169,110,0.3);
+  color:var(--gold);
+  font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,border-color .2s;
+}
+.carousel-btn:hover{background:var(--gold-dim);border-color:var(--gold)}
+
+.carousel-dots{
+  display:flex;align-items:center;gap:8px;
+}
+.dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(201,169,110,0.2);
+  cursor:pointer;transition:background .3s,transform .3s;
+}
+.dot.active{background:#f5a623;transform:scale(1.3)}
+
+@media(max-width:768px){
+  .wrap{padding:0 20px}
+  .carousel-track{padding:0 20px}
+  .dep-card{min-width:calc(80% - 10px)}
+}
+@media(max-width:480px){
+  .dep-card{min-width:calc(90% - 10px)}
+}
+
+/* ── sessão 06 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1e1e1e;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.15);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#antes-depois{padding:70px 24px 70px;text-align:center}
+.wrap{max-width:860px;margin:0 auto}
+
+h2{
+  font-size:clamp(26px,4vw,44px);
+  font-weight:800;line-height:1.15;letter-spacing:-1px;
+  color:var(--white);margin-bottom:16px;
+  max-width:600px;
+  margin-left:auto;margin-right:auto;
+}
+h2 em{font-style:italic;font-weight:300;color:var(--gold)}
+
+.subtitle{
+  font-size:17px;font-weight:300;
+  color:var(--muted);margin-bottom:52px;
+}
+
+/* SLIDER CONTAINER — formato 9x16 */
+.slider-container{
+  position:relative;
+  width:100%;
+  max-width:400px;
+  margin:0 auto;
+  border-radius:8px;
+  overflow:hidden;
+  cursor:ew-resize;
+  user-select:none;
+  touch-action:pan-y;
+  aspect-ratio:9/16;
+}
+
+/* IMAGENS */
+.img-base{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  background:#111;
+  position:absolute;
+  top:0;left:0;
+}
+
+.img-overlay-wrap{
+  position:absolute;
+  top:0;left:0;bottom:0;
+  width:50%;
+  overflow:hidden;
+}
+
+.img-overlay{
+  display:block;
+  height:100%;
+  object-fit:cover;
+  background:#2a2a2a;
+  position:absolute;
+  top:0;left:0;
+  width:400px;
+}
+
+/* DIVISOR */
+.divider{
+  position:absolute;
+  top:0;bottom:0;
+  left:50%;
+  width:2px;
+  background:var(--white);
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.divider-handle{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:40px;height:40px;
+  border-radius:50%;
+  background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 12px rgba(0,0,0,.5);
+  pointer-events:none;
+}
+.divider-handle svg{width:18px;height:18px;stroke:#111;fill:none;stroke-width:2}
+
+/* LABELS — centralizados na borda inferior */
+.label{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:20px 16px 16px;
+  font-size:11px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  text-align:center;
+  opacity:0;
+  transition:opacity .4s;
+  pointer-events:none;
+  background:linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 60%, transparent 100%);
+}
+.label-before{color:rgba(240,236,228,.85)}
+.label-after{color:var(--gold)}
+.label.visible{opacity:1}
+
+/* PLACEHOLDERS */
+.placeholder-base{
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;
+  background:#111;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:10px;color:#333;
+}
+.placeholder-base svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5}
+.placeholder-base span{font-size:10px;letter-spacing:2px;text-transform:uppercase}
+
+.placeholder-overlay{
+  position:absolute;top:0;left:0;
+  width:400px;height:100%;
+  background:#1c1c1c;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:10px;color:#444;
+}
+.placeholder-overlay svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5}
+.placeholder-overlay span{font-size:10px;letter-spacing:2px;text-transform:uppercase}
+
+/* INSTRUÇÃO */
+.hint{
+  margin-top:20px;
+  font-size:12px;font-weight:400;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(201,169,110,.4);
+}
+
+@media(max-width:600px){
+  #antes-depois{padding:72px 20px 80px}
+  .slider-container{max-width:100%}
+  .img-overlay{width:100vw}
+  .placeholder-overlay{width:100vw}
+}
+
+/* ── sessão 07 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.15);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --border:rgba(255,255,255,0.07);
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#modulos{padding:70px 24px 50px}
+.wrap{max-width:960px;margin:0 auto}
+
+h2{font-size:clamp(28px,4vw,46px);font-weight:800;line-height:1.1;letter-spacing:-1px;color:var(--white);margin-bottom:64px}
+h2 em{font-style:italic;font-weight:300;color:var(--gold)}
+
+.modulo{padding:48px 0;border-top:none}
+.modulo:last-of-type{border-bottom:none}
+
+.modulo-top{display:grid;grid-template-columns:340px 1fr;gap:64px;align-items:start;width:100%}
+
+.modulo-thumb{
+  border-radius:6px;overflow:hidden;aspect-ratio:16/9;
+  background:#1a1a1a;display:flex;align-items:center;
+  justify-content:center;flex-direction:column;gap:10px;color:#333;flex-shrink:0;
+}
+.modulo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.modulo-thumb svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.5}
+.modulo-thumb span{font-size:10px;letter-spacing:2px;text-transform:uppercase}
+
+.modulo-titulo{font-size:20px;font-weight:700;color:#f0ece4;margin-bottom:8px;line-height:1.2;white-space:nowrap}
+.modulo-titulo em{font-style:normal;color:var(--gold)}
+
+.modulo-meta{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:600;letter-spacing:1px;color:var(--muted);margin-bottom:20px}
+
+.modulo-texto{
+  font-size:15px;font-weight:300;line-height:1.8;
+  color:rgba(240,236,228,.7);margin-bottom:20px;
+  display:-webkit-box;-webkit-line-clamp:3;
+  -webkit-box-orient:vertical;overflow:hidden;
+  transition:all .3s;
+}
+.modulo-content.expandido .modulo-texto{
+  display:block;overflow:visible;
+}
+.modulo-texto strong{font-weight:600;color:var(--white)}
+
+/* BOTÃO */
+.btn-toggle{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--f);font-size:11px;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  color:#f5a623;background:transparent;
+  border:1px solid rgba(245,166,35,0.4);
+  padding:9px 18px;border-radius:3px;cursor:pointer;
+  transition:background .2s,border-color .2s;
+}
+.btn-toggle:hover{background:var(--gold-dim);border-color:var(--gold)}
+.btn-toggle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;transition:transform .3s}
+.btn-toggle.aberto svg{transform:rotate(180deg)}
+
+/* AULAS */
+.modulo-aulas{display:none;margin-top:20px}
+.modulo-aulas.visivel{display:block}
+
+.aulas-label{
+  font-size:12px;font-weight:400;color:var(--muted);
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.aulas-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.aulas-linha{
+  font-size:14px;font-weight:300;
+  color:rgba(240,236,228,.7);
+  line-height:1.8;margin-bottom:16px;
+}
+
+/* CTA */
+.cta-wrap{text-align:center;padding:60px 0 50px}
+.btn-gold{ /* vibrante */ 
+  display:inline-block;font-family:var(--f);
+  font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  text-decoration:none;color:#0f0f0f;background:#f5a623;
+  padding:18px 24px;border-radius:4px;transition:opacity .2s,transform .15s;
+}
+.btn-gold:hover{opacity:.85;transform:translateY(-1px)}
+
+@media(max-width:768px){
+  #modulos{padding:72px 20px 40px}
+  .modulo-top{grid-template-columns:1fr;gap:28px}
+}
+
+/* ── sessão 08 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1e1e1e;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.15);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#edicao{padding:70px 24px 70px;text-align:center}
+.wrap{max-width:860px;margin:0 auto}
+
+h2{
+  font-size:clamp(26px,4vw,44px);
+  font-weight:800;line-height:1.15;letter-spacing:-1px;
+  color:var(--white);margin-bottom:16px;
+  max-width:600px;
+  margin-left:auto;margin-right:auto;
+}
+h2 em{font-style:italic;font-weight:300;color:var(--gold)}
+
+.subtitle{
+  font-size:17px;font-weight:300;
+  color:var(--muted);margin-bottom:52px;
+}
+
+/* SLIDER CONTAINER — formato 9x16 */
+.slider-container{
+  position:relative;
+  width:100%;
+  max-width:400px;
+  margin:0 auto;
+  border-radius:8px;
+  overflow:hidden;
+  cursor:ew-resize;
+  user-select:none;
+  touch-action:pan-y;
+  aspect-ratio:9/16;
+}
+
+/* IMAGENS */
+.img-base{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  background:#111;
+  position:absolute;
+  top:0;left:0;
+}
+
+.img-overlay-wrap{
+  position:absolute;
+  top:0;left:0;bottom:0;
+  width:50%;
+  overflow:hidden;
+}
+
+.img-overlay{
+  display:block;
+  height:100%;
+  object-fit:cover;
+  background:#2a2a2a;
+  position:absolute;
+  top:0;left:0;
+  width:400px;
+}
+
+/* DIVISOR */
+.divider{
+  position:absolute;
+  top:0;bottom:0;
+  left:50%;
+  width:2px;
+  background:var(--white);
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.divider-handle{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:40px;height:40px;
+  border-radius:50%;
+  background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 12px rgba(0,0,0,.5);
+  pointer-events:none;
+}
+.divider-handle svg{width:18px;height:18px;stroke:#111;fill:none;stroke-width:2}
+
+/* LABELS — centralizados na borda inferior */
+.label{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:20px 16px 16px;
+  font-size:11px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  text-align:center;
+  opacity:0;
+  transition:opacity .4s;
+  pointer-events:none;
+  background:linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.3) 60%, transparent 100%);
+}
+.label-before{color:rgba(240,236,228,.85)}
+.label-after{color:var(--gold)}
+.label.visible{opacity:1}
+
+/* PLACEHOLDERS */
+.placeholder-base{
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;
+  background:#111;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:10px;color:#333;
+}
+.placeholder-base svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5}
+.placeholder-base span{font-size:10px;letter-spacing:2px;text-transform:uppercase}
+
+.placeholder-overlay{
+  position:absolute;top:0;left:0;
+  width:400px;height:100%;
+  background:#1c1c1c;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:10px;color:#444;
+}
+.placeholder-overlay svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5}
+.placeholder-overlay span{font-size:10px;letter-spacing:2px;text-transform:uppercase}
+
+/* INSTRUÇÃO */
+.hint{
+  margin-top:20px;
+  font-size:12px;font-weight:400;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(201,169,110,.4);
+}
+
+@media(max-width:600px){
+  #edicao{padding:72px 20px 80px}
+  .slider-container{max-width:100%}
+  .img-overlay{width:100vw}
+  .placeholder-overlay{width:100vw}
+}
+
+/* ── sessão 09 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;
+  --gold:#c9a96e;
+  --gold2:#e8d5b0;
+  --gold-dim:rgba(201,169,110,0.12);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --border:rgba(201,169,110,0.15);
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#garantia{padding:70px 24px 70px;text-align:center}
+.wrap{max-width:640px;margin:0 auto}
+
+/* SELO */
+.selo{
+  width:160px;height:160px;
+  margin:0 auto 48px;
+  display:flex;align-items:center;justify-content:center;
+  background:#1a1a1a;
+  border:1px solid rgba(201,169,110,0.2);
+  border-radius:50%;
+  flex-direction:column;gap:8px;color:#444;
+}
+.selo img{width:100%;height:100%;object-fit:contain;border-radius:50%;display:block;mix-blend-mode:screen}
+.selo svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.5}
+.selo span{font-size:9px;letter-spacing:2px;text-transform:uppercase}
+
+/* TEXTO */
+h2{
+  font-size:clamp(26px,4vw,40px);
+  font-weight:800;line-height:1.1;letter-spacing:-1px;
+  color:var(--white);margin-bottom:32px;
+}
+h2 em{font-style:italic;font-weight:300;color:var(--gold)}
+
+.garantia-texto{
+  font-size:16px;font-weight:300;
+  line-height:1.8;color:var(--muted);
+  margin-bottom:16px;
+}
+
+.divider{
+  width:40px;height:2px;
+  background:#f5a623;opacity:.4;
+  margin:28px auto;
+}
+
+.garantia-destaque{
+  font-size:17px;font-weight:600;
+  color:var(--white);line-height:1.7;
+}
+.garantia-destaque em{
+  font-style:italic;font-weight:300;
+  color:var(--gold);
+}
+
+@media(max-width:600px){
+  #garantia{padding:72px 20px 80px}
+}
+
+/* ── sessão 10 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1e1e1e;
+  --bg2:#252525;
+  --bg3:#2a2a2a;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.12);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --border:rgba(255,255,255,0.07);
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#oferta{padding:70px 24px 70px;text-align:center}
+.wrap{max-width:900px;margin:0 auto}
+
+h2{
+  font-size:clamp(26px,4vw,44px);
+  font-weight:800;line-height:1.1;letter-spacing:-1px;
+  color:var(--white);margin-bottom:16px;
+}
+h2 em{font-style:italic;font-weight:300;color:var(--gold)}
+
+.subtitle{
+  font-size:16px;font-weight:300;
+  color:var(--muted);margin-bottom:56px;
+  max-width:620px;margin-left:auto;margin-right:auto;
+}
+
+/* CARDS DE ITENS */
+.items-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.item-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:28px 24px;
+  text-align:left;
+}
+
+.item-titulo{
+  font-size:15px;font-weight:700;
+  color:var(--white);margin-bottom:10px;
+}
+
+.item-desc{
+  font-size:13px;font-weight:300;
+  color:var(--muted);line-height:1.6;
+  margin-bottom:20px;
+}
+
+.item-valor{
+  font-size:16px;font-weight:700;
+  color:var(--gold);
+}
+
+/* CARD PREÇO */
+.preco-card{
+  background:var(--bg3);
+  border:1px solid rgba(201,169,110,0.2);
+  border-radius:8px;
+  padding:48px 40px;
+  margin-bottom:24px;
+}
+
+.preco-label{
+  font-size:13px;font-weight:400;
+  color:var(--muted);margin-bottom:8px;
+  letter-spacing:.5px;
+}
+
+.preco-de{
+  font-size:28px;font-weight:700;
+  color:#c0392b;
+  text-decoration:line-through;
+  margin-bottom:16px;
+  opacity:.8;
+}
+
+.preco-aviso{
+  font-size:15px;font-weight:300;
+  color:var(--muted);margin-bottom:6px;
+}
+
+.preco-convite{
+  font-size:15px;font-weight:400;
+  color:rgba(240,236,228,.7);margin-bottom:20px;
+}
+
+.preco-por{
+  font-size:clamp(44px,7vw,72px);
+  font-weight:900;
+  color:#f5a623;
+  line-height:1;
+  letter-spacing:-2px;
+  margin-bottom:12px;
+}
+
+.preco-avista{
+  font-size:15px;font-weight:400;
+  color:var(--muted);margin-bottom:36px;
+}
+
+/* BOTÃO */
+.btn-gold{ /* vibrante */ 
+  display:inline-block;font-family:var(--f);
+  font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  text-decoration:none;color:#0f0f0f;background:#f5a623;
+  padding:20px 56px;border-radius:4px;
+  transition:opacity .2s,transform .15s;
+}
+.btn-gold:hover{opacity:.85;transform:translateY(-1px)}
+
+.btn-sub{
+  display:block;
+  font-size:12px;font-weight:300;
+  color:var(--muted);margin-top:14px;
+  letter-spacing:.5px;
+}
+
+@media(max-width:680px){
+  #oferta{padding:72px 20px 80px}
+  .items-grid{grid-template-columns:1fr}
+  .preco-card{padding:36px 24px}
+}
+
+/* ── sessão 11 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f0f;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.12);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --border:rgba(255,255,255,0.07);
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#professor{padding:70px 24px 70px}
+.wrap{max-width:960px;margin:0 auto}
+
+h2{
+  font-size:clamp(28px,4vw,46px);
+  font-weight:800;line-height:1.1;letter-spacing:-1px;
+  color:var(--white);margin-bottom:64px;
+  text-align:center;
+}
+h2 em{font-style:italic;font-weight:300;color:var(--gold)}
+
+.prof-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:start;
+}
+
+/* FOTO */
+.prof-foto-placeholder{
+  width:100%;aspect-ratio:3/4;
+  background:#1a1a1a;
+  border:1px solid var(--border);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:10px;color:#333;
+}
+.prof-foto-placeholder svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5}
+.prof-foto-placeholder span{font-size:10px;letter-spacing:2px;text-transform:uppercase}
+
+/* CONTEÚDO */
+.prof-subtitulo{
+  font-size:13px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:32px;
+}
+
+.prof-texto{
+  font-size:16px;font-weight:300;line-height:1.85;
+  color:rgba(240,236,228,.75);
+  margin-bottom:20px;
+}
+.prof-texto strong{font-weight:600;color:var(--white)}
+
+.esp-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px 20px;
+  margin-bottom:28px;
+}
+.esp-item{
+  display:flex;align-items:center;gap:10px;
+  font-size:14px;font-weight:400;
+  color:rgba(240,236,228,.7);
+}
+.esp-item::before{
+  content:'';width:4px;height:4px;border-radius:50%;
+  background:#f5a623;flex-shrink:0;
+}
+
+.prof-fechamento{
+  font-size:16px;font-weight:300;line-height:1.85;
+  color:rgba(240,236,228,.75);
+  border-left:2px solid var(--gold);
+  padding-left:20px;
+}
+
+.highlight{
+  font-weight:700;
+  color:var(--white);
+  position:relative;
+  display:inline;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 24' preserveAspectRatio='none'%3E%3Cpath d='M2,18 C20,14 40,20 70,16 C100,12 120,20 150,17 C180,14 210,20 240,16 C265,13 285,18 298,15' stroke='%23c9a96e' stroke-width='10' fill='none' stroke-linecap='round' opacity='0.35'/%3E%3Cpath d='M4,19 C30,16 55,21 85,17 C115,13 135,21 165,18 C195,15 220,21 250,17 C272,14 288,19 296,16' stroke='%23c9a96e' stroke-width='6' fill='none' stroke-linecap='round' opacity='0.25'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 85%;
+  background-size: 100% 14px;
+  padding-bottom: 2px;
+}
+
+@media(max-width:768px){
+  #professor{padding:72px 20px 80px}
+  .prof-grid{grid-template-columns:1fr;gap:40px}
+}
+
+/* ── sessão 12 ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1e1e1e;
+  --bg2:#232323;
+  --gold:#c9a96e;
+  --gold-dim:rgba(201,169,110,0.12);
+  --white:#f0ece4;
+  --muted:#9a9088;
+  --border:rgba(255,255,255,0.07);
+  --f:'Montserrat',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--f);-webkit-font-smoothing:antialiased}
+
+#faq{padding:70px 24px 70px;text-align:center}
+.wrap{max-width:720px;margin:0 auto}
+
+h2{
+  font-size:clamp(28px,4vw,46px);
+  font-weight:800;line-height:1.1;letter-spacing:-1px;
+  color:var(--white);margin-bottom:56px;
+}
+h2 em{font-style:italic;font-weight:300;color:var(--gold)}
+
+/* FAQ ITEMS */
+.faq-list{display:flex;flex-direction:column;gap:8px;text-align:left}
+
+.faq-item{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  transition:border-color .2s;
+}
+.faq-item.aberto{border-color:rgba(201,169,110,0.25)}
+
+.faq-pergunta{
+  width:100%;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;
+  padding:22px 24px;
+  background:transparent;
+  border:none;cursor:pointer;
+  font-family:var(--f);font-size:15px;font-weight:600;
+  color:var(--white);text-align:left;
+  transition:color .2s;
+}
+.faq-pergunta:hover{color:var(--gold)}
+.faq-item.aberto .faq-pergunta{color:var(--gold)}
+
+.faq-icon{
+  width:20px;height:20px;flex-shrink:0;
+  stroke:var(--muted);fill:none;stroke-width:2;
+  transition:transform .3s,stroke .2s;
+}
+.faq-item.aberto .faq-icon{transform:rotate(180deg);stroke:var(--gold)}
+
+.faq-resposta{
+  max-height:0;overflow:hidden;
+  transition:max-height .35s ease, padding .35s ease;
+  padding:0 24px;
+}
+.faq-resposta-inner{
+  font-size:14px;font-weight:300;
+  line-height:1.75;color:var(--muted);
+  padding-bottom:22px;
+}
+
+.faq-item.aberto .faq-resposta{
+  max-height:200px;
+  padding:0 24px;
+}
+
+@media(max-width:600px){
+  #faq{padding:72px 20px 80px}
+  .faq-pergunta{font-size:14px;padding:18px 18px}
+  .faq-resposta{padding:0 18px}
+  .faq-item.aberto .faq-resposta{padding:0 18px}
+}
+
+/* ═══════════════════════════════
+   MOBILE GLOBAL — max-width 768px
+   ═══════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* NAV */
+  nav { padding: 14px 20px; }
+  .nav-logo span { display: none; }
+
+  /* HERO */
+  #hero { padding: 100px 20px 60px; text-align: center; }
+  .hero-headline { font-size: clamp(32px, 9vw, 52px); letter-spacing: -1px; }
+  .hero-sub { font-size: 15px; }
+  .photo-grid { grid-template-columns: repeat(3, 1fr); }
+  .photo-slot:nth-child(n+4) { display: none; }
+  .slider-wrap { margin-bottom: 32px; }
+
+  /* TRUST */
+  #trust { padding: 40px 20px; }
+  .trust-grid { grid-template-columns: 1fr; }
+  .trust-item { border-right: none; border-bottom: 1px solid var(--border); padding: 24px 16px; }
+  .trust-item:last-child { border-bottom: none; }
+
+  /* O QUE É */
+  #oque { padding: 72px 20px; }
+  .oque-inner { grid-template-columns: 1fr; gap: 32px; }
+
+  /* PARA QUEM */
+  #paraquem { padding: 72px 20px 80px; }
+  .pq-grid { grid-template-columns: 1fr; }
+  .pq-item { padding: 18px 0; border-right: none !important; border-left: none !important; }
+  .pq-item:nth-child(even) { padding-left: 0; }
+  .pq-item:nth-child(odd) { padding-right: 0; }
+  .pq-item:nth-last-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .pq-item:last-child { border-bottom: none; }
+
+  /* DEPOIMENTOS */
+  #depoimentos { padding: 72px 0 80px; }
+  .dep-card { min-width: calc(85% - 10px); }
+  .carousel-track { padding: 0 20px; }
+
+  /* ANTES DEPOIS */
+  #antes-depois { padding: 72px 20px 80px; }
+  .slider-container { max-width: 100%; }
+  .img-overlay { width: 100vw !important; }
+  .placeholder-overlay { width: 100vw !important; }
+
+  /* MÓDULOS */
+  #modulos { padding: 72px 20px 40px; }
+  .modulo-top { grid-template-columns: 1fr !important; gap: 24px; }
+  .modulo-titulo { white-space: normal !important; font-size: 18px; }
+  .modulo { padding: 36px 0; }
+
+  /* EDIÇÃO */
+  #edicao { padding: 72px 20px 80px; }
+
+  /* GARANTIA */
+  #garantia { padding: 72px 20px 80px; }
+
+  /* OFERTA */
+  #oferta { padding: 72px 20px 80px; }
+  .items-grid { grid-template-columns: 1fr; }
+  .preco-card { padding: 32px 20px; }
+  .preco-por { font-size: clamp(36px, 12vw, 56px); }
+
+  /* PROFESSOR */
+  #professor { padding: 72px 20px 80px; }
+  .prof-grid { grid-template-columns: 1fr; gap: 36px; }
+  .prof-subtitulo { font-size: 12px; }
+
+  /* FAQ */
+  #faq { padding: 72px 20px 80px; }
+  .faq-pergunta { font-size: 14px; padding: 18px 16px; }
+
+  /* WRAP GLOBAL */
+  .wrap { padding: 0 !important; }
+
+  /* HEADLINES */
+  h2 { font-size: clamp(24px, 7vw, 38px) !important; }
+
+  /* BOTÕES */
+  .btn, .btn-gold, .nav-cta {
+    padding: 16px 28px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-headline { font-size: clamp(28px, 10vw, 42px); }
+  .dep-card { min-width: calc(90% - 10px); }
+  .preco-por { font-size: clamp(32px, 13vw, 48px); }
+  .modulo-titulo { font-size: 16px; }
+}
+
+.check-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;border-radius:50%;
+  background:#27ae60;color:#fff;
+  font-size:10px;font-weight:700;
+  margin-right:6px;flex-shrink:0;
+  vertical-align:middle;
+}
+.item-titulo{display:flex;align-items:center;}
+
+.slider-wrap{cursor:grab;}
+.slider-wrap:active{cursor:grabbing;}
+
+/* SEPARADORES ENTRE SESSÕES */
+section + section {
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+/* AJUSTE: botão do slider antes/depois no centro vertical */
+#antes-depois .slider-container .divider,
+#edicao .slider-container .divider{
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:50%;
+  width:2px !important;
+  height:auto !important;
+  background:var(--white) !important;
+  transform:translateX(-50%);
+  pointer-events:none;
+  margin:0 !important;
+}
+
+#antes-depois .slider-container .divider-handle,
+#edicao .slider-container .divider-handle{
+  position:absolute !important;
+  top:50% !important;
+  left:50% !important;
+  transform:translate(-50%,-50%) !important;
+}
+
+
+/* AJUSTE DOS CARDS DA OFERTA */
+.item-card{
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+.item-titulo{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:10px;
+  min-height:48px;
+}
+
+.check-badge{
+  order:2 !important;
+  margin-right:0 !important;
+  margin-left:8px !important;
+  flex-shrink:0;
+}
+
+.item-valor{
+  margin-top:auto !important;
+  padding-top:16px;
+}
+
+
+/* CHECK AO LADO DA ÚLTIMA PALAVRA DO TÍTULO */
+.item-titulo{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  flex-wrap:wrap !important;
+  gap:8px !important;
+  min-height:auto !important;
+}
+
+.check-badge{
+  display:inline-flex !important;
+  margin:0 !important;
+  vertical-align:middle !important;
+}
+
+.item-card{
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+.item-valor{
+  margin-top:auto !important;
+}
+
+
+
+/* AJUSTE: carrossel do topo mais compacto */
+#hero .slider-wrap{
+  max-width:720px !important;
+  margin-bottom:28px !important;
+}
+
+#hero .slide{
+  aspect-ratio:auto !important;
+  height:420px !important;
+}
+
+#hero .slide img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block !important;
+}
+
+#hero .slider-dots{
+  margin-bottom:30px !important;
+}
+
+@media(max-width:768px){
+  #hero .slider-wrap{
+    max-width:100% !important;
+    margin-bottom:24px !important;
+  }
+
+  #hero .slide{
+    min-width:58% !important;
+    aspect-ratio:4/5 !important;
+  }
+}
+
+@media(max-width:480px){
+  #hero .slide{
+    min-width:64% !important;
+  }
+}
+
+
+
+/* AJUSTE FINAL: depoimentos elegantes em 9x16 */
+#depoimentos.depoimentos-elegantes{
+  padding:90px 24px 100px !important;
+  text-align:center !important;
+  overflow:hidden !important;
+  background:#0f0f0f !important;
+}
+
+#depoimentos .depoimentos-head{
+  max-width:760px !important;
+  margin:0 auto 46px !important;
+  padding:0 !important;
+}
+
+#depoimentos .depoimentos-head h2{
+  margin-bottom:18px !important;
+}
+
+#depoimentos .depoimentos-sub{
+  max-width:560px !important;
+  margin:0 auto !important;
+  font-size:15px !important;
+  line-height:1.75 !important;
+  color:rgba(240,236,228,.64) !important;
+}
+
+#depoimentos .depoimentos-showcase{
+  width:100% !important;
+  max-width:1040px !important;
+  margin:0 auto !important;
+  display:grid !important;
+  grid-template-columns:1.08fr repeat(4, .86fr) !important;
+  gap:16px !important;
+  align-items:center !important;
+}
+
+#depoimentos .depoimento-card{
+  position:relative !important;
+  width:100% !important;
+  aspect-ratio:9/16 !important;
+  max-height:430px !important;
+  overflow:hidden !important;
+  border-radius:16px !important;
+  background:#161616 !important;
+  border:1px solid rgba(201,169,110,.16) !important;
+  box-shadow:0 18px 50px rgba(0,0,0,.28) !important;
+  transform:translateY(0) !important;
+}
+
+#depoimentos .depoimento-card.destaque{
+  max-height:500px !important;
+  border-color:rgba(201,169,110,.32) !important;
+}
+
+#depoimentos .depoimento-card:nth-child(2),
+#depoimentos .depoimento-card:nth-child(4){
+  transform:translateY(24px) !important;
+}
+
+#depoimentos .depoimento-card img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block !important;
+}
+
+#depoimentos .depoimento-card::after{
+  content:'' !important;
+  position:absolute !important;
+  inset:auto 0 0 0 !important;
+  height:34% !important;
+  background:linear-gradient(to top, rgba(0,0,0,.72), transparent) !important;
+  pointer-events:none !important;
+}
+
+#depoimentos .depoimento-legenda{
+  position:absolute !important;
+  left:14px !important;
+  right:14px !important;
+  bottom:14px !important;
+  z-index:2 !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  letter-spacing:1.8px !important;
+  text-transform:uppercase !important;
+  color:#f5a623 !important;
+  text-align:left !important;
+}
+
+#depoimentos .carousel-outer,
+#depoimentos .carousel-controls{
+  display:none !important;
+}
+
+@media(max-width:980px){
+  #depoimentos .depoimentos-showcase{
+    max-width:760px !important;
+    grid-template-columns:repeat(3, 1fr) !important;
+  }
+
+  #depoimentos .depoimento-card,
+  #depoimentos .depoimento-card.destaque{
+    max-height:420px !important;
+  }
+
+  #depoimentos .depoimento-card:nth-child(2),
+  #depoimentos .depoimento-card:nth-child(4){
+    transform:none !important;
+  }
+}
+
+@media(max-width:620px){
+  #depoimentos.depoimentos-elegantes{
+    padding:72px 20px 82px !important;
+  }
+
+  #depoimentos .depoimentos-showcase{
+    display:flex !important;
+    overflow-x:auto !important;
+    gap:14px !important;
+    padding:0 2px 12px !important;
+    scroll-snap-type:x mandatory !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  #depoimentos .depoimentos-showcase::-webkit-scrollbar{
+    display:none !important;
+  }
+
+  #depoimentos .depoimento-card,
+  #depoimentos .depoimento-card.destaque{
+    min-width:72% !important;
+    max-height:none !important;
+    scroll-snap-align:center !important;
+  }
+}
+
+/* AJUSTE FINAL: carrossel do topo com 12 fotos */
+#hero .slide{
+  aspect-ratio:9/16 !important;
+}
+</style>
+
+<style>
+/* AJUSTE FINAL: proporção 9x16 nos carrosséis sem ocupar várias dobras */
+#hero .slider-wrap{
+  max-width:860px !important;
+  margin-bottom:28px !important;
+}
+#hero .slider-track{
+  gap:16px !important;
+  align-items:stretch !important;
+}
+#hero .slide{
+  width:230px !important;
+  min-width:230px !important;
+  height:409px !important;
+  aspect-ratio:9/16 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  border-radius:6px !important;
+}
+#hero .slide img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block !important;
+}
+#hero .slider-dots{
+  margin-bottom:30px !important;
+}
+
+#depoimentos .carousel-track{
+  align-items:flex-start !important;
+  gap:16px !important;
+}
+#depoimentos .dep-card{
+  width:220px !important;
+  min-width:220px !important;
+  max-width:220px !important;
+}
+#depoimentos .dep-img{
+  aspect-ratio:9/16 !important;
+  height:auto !important;
+  width:100% !important;
+  object-fit:cover !important;
+}
+
+@media(max-width:768px){
+  #hero .slider-wrap{
+    max-width:100% !important;
+  }
+  #hero .slide{
+    width:180px !important;
+    min-width:180px !important;
+    height:320px !important;
+  }
+  #depoimentos .dep-card{
+    width:190px !important;
+    min-width:190px !important;
+    max-width:190px !important;
+  }
+}
+
+@media(max-width:480px){
+  #hero .slide{
+    width:165px !important;
+    min-width:165px !important;
+    height:293px !important;
+  }
+  #depoimentos .dep-card{
+    width:175px !important;
+    min-width:175px !important;
+    max-width:175px !important;
+  }
+}
+</style>
+
+<style>
+/* CORREÇÃO FINAL: depoimentos com apenas 5 cards e conjunto centralizado */
+#depoimentos.depoimentos-elegantes{
+  padding:90px 24px 100px !important;
+  text-align:center !important;
+  overflow:hidden !important;
+}
+
+#depoimentos .depoimentos-head{
+  max-width:760px !important;
+  margin:0 auto 46px !important;
+}
+
+#depoimentos .depoimentos-showcase{
+  width:100% !important;
+  max-width:980px !important;
+  margin:0 auto !important;
+  padding:0 !important;
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:14px !important;
+  flex-wrap:nowrap !important;
+}
+
+#depoimentos .depoimento-card{
+  flex:0 0 168px !important;
+  width:168px !important;
+  min-width:168px !important;
+  max-width:168px !important;
+  aspect-ratio:9/16 !important;
+  height:auto !important;
+  max-height:none !important;
+  position:relative !important;
+  overflow:hidden !important;
+  border-radius:16px !important;
+  background:#161616 !important;
+  border:1px solid rgba(201,169,110,.18) !important;
+  box-shadow:0 18px 50px rgba(0,0,0,.28) !important;
+  transform:none !important;
+}
+
+#depoimentos .depoimento-card.destaque{
+  flex-basis:190px !important;
+  width:190px !important;
+  min-width:190px !important;
+  max-width:190px !important;
+  border-color:rgba(201,169,110,.36) !important;
+}
+
+#depoimentos .depoimento-card img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block !important;
+}
+
+#depoimentos .carousel-outer,
+#depoimentos .carousel-controls,
+#depoimentos .dep-card{
+  display:none !important;
+}
+
+@media(max-width:900px){
+  #depoimentos .depoimentos-showcase{
+    max-width:760px !important;
+    gap:12px !important;
+  }
+  #depoimentos .depoimento-card{
+    flex-basis:140px !important;
+    width:140px !important;
+    min-width:140px !important;
+    max-width:140px !important;
+  }
+  #depoimentos .depoimento-card.destaque{
+    flex-basis:160px !important;
+    width:160px !important;
+    min-width:160px !important;
+    max-width:160px !important;
+  }
+}
+
+@media(max-width:620px){
+  #depoimentos.depoimentos-elegantes{
+    padding:72px 20px 82px !important;
+  }
+  #depoimentos .depoimentos-showcase{
+    justify-content:flex-start !important;
+    overflow-x:auto !important;
+    max-width:100% !important;
+    padding:0 0 14px !important;
+    scroll-snap-type:x mandatory !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  #depoimentos .depoimentos-showcase::-webkit-scrollbar{
+    display:none !important;
+  }
+  #depoimentos .depoimento-card,
+  #depoimentos .depoimento-card.destaque{
+    flex:0 0 68% !important;
+    width:68% !important;
+    min-width:68% !important;
+    max-width:68% !important;
+    scroll-snap-align:center !important;
+  }
+}
+
+
+/* CORREÇÃO: depoimentos em carrossel único 9x16 */
+#depoimentos.depoimentos-carousel-single{
+  padding:90px 24px 100px !important;
+  text-align:center !important;
+  overflow:hidden !important;
+  background:#0f0f0f !important;
+}
+
+#depoimentos.depoimentos-carousel-single .depoimentos-head{
+  max-width:760px !important;
+  margin:0 auto 42px !important;
+  padding:0 !important;
+}
+
+#depoimentos.depoimentos-carousel-single .depoimentos-head h2{
+  margin-bottom:18px !important;
+}
+
+#depoimentos.depoimentos-carousel-single .depoimentos-sub{
+  max-width:560px !important;
+  margin:0 auto !important;
+  font-size:15px !important;
+  line-height:1.75 !important;
+  color:rgba(240,236,228,.64) !important;
+}
+
+#depoimentos .depo-carousel-wrap{
+  width:100% !important;
+  max-width:520px !important;
+  margin:0 auto !important;
+  display:grid !important;
+  grid-template-columns:48px minmax(0, 1fr) 48px !important;
+  align-items:center !important;
+  gap:18px !important;
+}
+
+#depoimentos .depo-viewport{
+  width:100% !important;
+  max-width:270px !important;
+  aspect-ratio:9/16 !important;
+  margin:0 auto !important;
+  overflow:hidden !important;
+  border-radius:18px !important;
+  background:#151515 !important;
+  border:1px solid rgba(201,169,110,.28) !important;
+  box-shadow:0 22px 60px rgba(0,0,0,.38) !important;
+}
+
+#depoimentos .depo-track{
+  height:100% !important;
+  display:flex !important;
+  transition:transform .45s cubic-bezier(.4,0,.2,1) !important;
+  will-change:transform !important;
+}
+
+#depoimentos .depo-slide{
+  flex:0 0 100% !important;
+  width:100% !important;
+  height:100% !important;
+  aspect-ratio:9/16 !important;
+  overflow:hidden !important;
+  background:#151515 !important;
+}
+
+#depoimentos .depo-slide img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block !important;
+}
+
+#depoimentos .depo-nav{
+  width:44px !important;
+  height:44px !important;
+  border-radius:50% !important;
+  border:1px solid rgba(201,169,110,.35) !important;
+  background:rgba(255,255,255,.03) !important;
+  color:#c9a96e !important;
+  font-size:18px !important;
+  cursor:pointer !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  transition:background .2s, transform .2s, border-color .2s !important;
+}
+
+#depoimentos .depo-nav:hover{
+  background:rgba(201,169,110,.12) !important;
+  border-color:#c9a96e !important;
+  transform:translateY(-1px) !important;
+}
+
+#depoimentos .depo-dots{
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:8px !important;
+  margin-top:26px !important;
+}
+
+#depoimentos .depo-dot{
+  width:7px !important;
+  height:7px !important;
+  border-radius:999px !important;
+  border:0 !important;
+  background:rgba(201,169,110,.28) !important;
+  cursor:pointer !important;
+  padding:0 !important;
+  transition:background .25s, transform .25s, width .25s !important;
+}
+
+#depoimentos .depo-dot.active{
+  width:20px !important;
+  background:#f5a623 !important;
+  transform:none !important;
+}
+
+@media(max-width:620px){
+  #depoimentos.depoimentos-carousel-single{
+    padding:72px 20px 82px !important;
+  }
+  #depoimentos .depo-carousel-wrap{
+    max-width:360px !important;
+    grid-template-columns:38px minmax(0, 1fr) 38px !important;
+    gap:10px !important;
+  }
+  #depoimentos .depo-viewport{
+    max-width:230px !important;
+  }
+  #depoimentos .depo-nav{
+    width:36px !important;
+    height:36px !important;
+    font-size:16px !important;
+  }
+}
+
+@media(max-width:390px){
+  #depoimentos .depo-carousel-wrap{
+    grid-template-columns:32px minmax(0, 1fr) 32px !important;
+    gap:8px !important;
+  }
+  #depoimentos .depo-viewport{
+    max-width:210px !important;
+  }
+  #depoimentos .depo-nav{
+    width:32px !important;
+    height:32px !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ SESSÃO 01 ═══ -->
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="cabecalho.png" alt="Método Arte" style="mix-blend-mode:screen;filter:invert(1)">
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+
+  <h1 class="hero-headline">
+    Aprenda a fazer<br>
+    fotos <em>incríveis</em><br>
+    com o seu celular.
+  </h1>
+
+  <p class="hero-sub">
+    Esse é o método que te ajuda a fazer fotografias únicas,
+    que atraem a atenção das pessoas, com qualidade de um
+    olhar profissional, usando o celular que você já tem.
+  </p>
+
+  <p class="hero-gallery-label">No Método ARTE você vai aprender a fazer fotografias como essas:</p>
+
+  <!-- SLIDER -->
+  <div class="slider-wrap">
+    <button class="slider-arrow slider-arrow--prev" id="heroPrev" aria-label="Anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="slider-arrow slider-arrow--next" id="heroNext" aria-label="Próximo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="slider-track" id="track">
+      <!-- imagens do cabeçalho -->
+      <div class="slide"><img src="f1.jpg" alt="Foto 1" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f2.jpg" alt="Foto 2" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f3.jpg" alt="Foto 3" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f4.jpg" alt="Foto 4" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f5.jpg" alt="Foto 5" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f6.jpg" alt="Foto 6" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f7.jpg" alt="Foto 7" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f8.jpg" alt="Foto 8" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f9.jpg" alt="Foto 9" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f10.jpg" alt="Foto 10" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f11.jpg" alt="Foto 11" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="slide"><img src="f12.jpg" alt="Foto 12" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+    </div>
+  </div>
+
+  <div class="slider-dots" id="dots"></div>
+
+  <a href="#oferta" class="btn-gold">Quero fazer fotos incríveis</a>
+
+</section>
+
+<!-- ═══ SESSÃO 02 ═══ -->
+<section id="trust">
+  <div class="trust-grid">
+
+    <div class="trust-item">
+      <div class="trust-ico">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      </div>
+      <div class="trust-t">Acesso Imediato e Vitalício</div>
+      <div class="trust-d">Seu acesso está liberado para sempre. Assista quantas vezes quiser, no seu ritmo, de qualquer lugar.</div>
+    </div>
+
+    <div class="trust-item">
+      <div class="trust-ico">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="trust-t">Garantia de 15 Dias</div>
+      <div class="trust-d">Aplique o método e veja com seus próprios olhos. Se não transformar suas fotos, devolvemos 100% do seu dinheiro.</div>
+    </div>
+
+    <div class="trust-item">
+      <div class="trust-ico">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <div class="trust-t">Compra Segura</div>
+      <div class="trust-d">Pagamento processado pela Hotmart com criptografia total. Seus dados estão completamente protegidos.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SESSÃO 03 ═══ -->
+<section id="oque">
+  <div class="wrap">
+
+    <h2>
+      Por que o Método ARTE funciona<br>mesmo que você <em>nunca tenha</em><br><em>estudado fotografia antes</em>
+    </h2>
+
+    <p>Fotografar é a habilidade de <strong>perceber o mundo ao seu redor</strong>. A gente faz isso o tempo todo: quando vemos uma paisagem, uma cena bonita, um momento importante. Mas muita gente não faz o registro desse mundo, porque não sabe como fazer isso.</p>
+
+    <div class="divider"></div>
+
+    <p>O Método ARTE é o jeito <strong>simples e prático</strong> de transformar o mundo ao seu redor em fotografias inesquecíveis. Sem truques ou dicas que quase nunca funcionam.</p>
+
+    <p>Aqui você aprende a fotografar em qualquer situação, usando técnicas que transformam fotos comuns em <strong>fotografias impressionantes</strong>.</p>
+
+  </div>
+</section>
+
+<!-- ═══ SESSÃO 04 ═══ -->
+<section id="paraquem">
+  <div class="wrap">
+
+    <h2>O Método ARTE funciona pra quem…</h2>
+
+    <div class="pq-grid">
+
+      <div class="pq-item">
+        <div class="pq-num">01</div>
+        <div class="pq-text">Sente que as fotos nunca ficam tão bonitas quanto o que viu ao vivo</div>
+      </div>
+
+      <div class="pq-item">
+        <div class="pq-num">02</div>
+        <div class="pq-text">Quer criar conteúdo visual de qualidade para crescer nas redes</div>
+      </div>
+
+      <div class="pq-item">
+        <div class="pq-num">03</div>
+        <div class="pq-text">Quer fazer fotos bonitas para as redes sociais</div>
+      </div>
+
+      <div class="pq-item">
+        <div class="pq-num">04</div>
+        <div class="pq-text">Quer se ver melhor nas fotos</div>
+      </div>
+
+      <div class="pq-item">
+        <div class="pq-num">05</div>
+        <div class="pq-text">Quer transformar o celular em uma ferramenta de trabalho</div>
+      </div>
+
+      <div class="pq-item">
+        <div class="pq-num">06</div>
+        <div class="pq-text">Quer melhorar as fotos de produtos ou projetos pessoais</div>
+      </div>
+
+      <div class="pq-item">
+        <div class="pq-num">07</div>
+        <div class="pq-text">Sempre pensou que não tinha talento para fotografia</div>
+      </div>
+
+      <div class="pq-item">
+        <div class="pq-num">08</div>
+        <div class="pq-text">Quer ter fotos bonitas do dia a dia</div>
+      </div>
+
+    </div>
+
+    <a href="#oferta" class="btn-gold">O Método ARTE é pra mim</a>
+
+  </div>
+</section>
+
+<!-- ═══ SESSÃO 05 ═══ -->
+<section id="depoimentos" class="depoimentos-carousel-single">
+  <div class="wrap depoimentos-head">
+    <h2>Essas pessoas tiveram o<br>olhar <em>transformado</em> pelo<br>Método ARTE</h2>
+    <p class="depoimentos-sub">Veja alguns resultados e relatos de alunos que começaram a fotografar com mais intenção, técnica e sensibilidade.</p>
+  </div>
+
+  <div class="depo-carousel-wrap" aria-label="Carrossel de depoimentos de alunos">
+    <button class="depo-nav depo-prev" type="button" aria-label="Depoimento anterior">&#8592;</button>
+
+    <div class="depo-viewport">
+      <div class="depo-track">
+        <article class="depo-slide">
+          <img class="depoimento-carousel-img" src="depoimento1.JPG" data-base="depoimento1" alt="Depoimento 1">
+        </article>
+        <article class="depo-slide">
+          <img class="depoimento-carousel-img" src="depoimento2.JPG" data-base="depoimento2" alt="Depoimento 2">
+        </article>
+        <article class="depo-slide">
+          <img class="depoimento-carousel-img" src="depoimento3.jpg" data-base="depoimento3" alt="Depoimento 3">
+        </article>
+        <article class="depo-slide">
+          <img class="depoimento-carousel-img" src="depoimento4.JPG" data-base="depoimento4" alt="Depoimento 4">
+        </article>
+        <article class="depo-slide">
+          <img class="depoimento-carousel-img" src="depoimento5.JPG" data-base="depoimento5" alt="Depoimento 5">
+        </article>
+      </div>
+    </div>
+
+    <button class="depo-nav depo-next" type="button" aria-label="Próximo depoimento">&#8594;</button>
+  </div>
+
+  <div class="depo-dots" aria-label="Navegação dos depoimentos"></div>
+</section>
+
+<!-- ═══ SESSÃO 06 ═══ -->
+<section id="antes-depois">
+  <div class="wrap">
+
+    <h2>A diferença brutal entre uma foto qualquer<br>e uma fotografia <nobr><em>com Método ARTE</em></nobr></h2>
+    <p class="subtitle">Essas fotografias foram feitas no mesmo lugar e na mesma hora, mas por pessoas diferentes.</p>
+
+    <div class="slider-container" id="slider">
+
+      <!-- FOTO COMUM (base) -->
+      <img class="img-base" src="comparacao1.jpg" alt="Foto comum">
+
+      <!-- FOTO COM MÉTODO ARTE (overlay) -->
+      <div class="img-overlay-wrap" id="overlay-wrap">
+        <img class="img-overlay" src="comparacao2.jpg" alt="Foto com Método ARTE">
+      </div>
+
+      <!-- DIVISOR -->
+      <div class="divider" id="divider">
+        <div class="divider-handle">
+          <svg viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3"/></svg>
+        </div>
+      </div>
+
+      <!-- LABELS -->
+      <div class="label label-before" id="label-before">Foto comum</div>
+      <div class="label label-after" id="label-after">Foto com Método ARTE</div>
+
+    </div>
+
+    <p class="hint">&#8592; arraste para revelar &#8594;</p>
+
+  </div>
+</section>
+
+<!-- ═══ SESSÃO 07 ═══ -->
+<section id="modulos">
+  <div class="wrap">
+
+    <h2 style="font-size:clamp(28px,4vw,46px);font-weight:800;line-height:1.1;letter-spacing:-1px;color:#f0ece4;margin-bottom:64px;text-align:center;">O que tem no<br><em style="font-style:italic;font-weight:300;color:#c9a96e;">Método ARTE?</em></h2>
+
+    <!-- MÓDULO 01 -->
+    <div class="modulo">
+      <div class="modulo-top">
+        <div class="modulo-thumb">
+          <img src="modulo1.jpg" alt="Módulo 1">
+        </div>
+        <div class="modulo-content">
+          <div class="modulo-titulo">A de <em>Ajuste Técnico</em></div>
+          <div class="modulo-meta"><span>Módulo 01</span></div>
+          <p class="modulo-texto">Você vai descobrir que o celular que já está no seu bolso é muito mais poderoso do que parece. Nesse módulo você aprende a dominar as funções da câmera nativa: foco, exposição, HDR, grid, modos de retrato e muito mais. A partir daqui, você para de apertar o botão e torcer. <strong>Você passa a controlar.</strong></p>
+          <button class="btn-toggle" onclick="toggleAulas(this)">
+            Ver aulas <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="modulo-aulas">
+            <div class="aulas-label">Aulas</div>
+            <div class="aulas-linha">Configurando o seu Android - Configurando o seu iPhone</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÓDULO 02 -->
+    <div class="modulo">
+      <div class="modulo-top">
+        <div class="modulo-thumb">
+          <img src="modulo2.jpg" alt="Módulo 2">
+        </div>
+        <div class="modulo-content">
+          <div class="modulo-titulo">R de <em>Regras de Composição</em></div>
+          <div class="modulo-meta"><span>Módulo 02</span></div>
+          <p class="modulo-texto">Uma boa foto não acontece por acidente. Ela é construída. Aqui você aprende as regras que os fotógrafos profissionais usam para guiar o olhar de quem vê a imagem: regra dos terços, linhas-guia, simetria, molduras e enquadramentos. <strong>Você vai começar a pensar na foto antes de clicar.</strong></p>
+          <button class="btn-toggle" onclick="toggleAulas(this)">
+            Ver aulas <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="modulo-aulas">
+            <div class="aulas-label">Aulas</div>
+            <div class="aulas-linha">Regras de Composição - Regra dos Terços - Linhas, molduras e camadas - Aplicando as regras na prática</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÓDULO 03 -->
+    <div class="modulo">
+      <div class="modulo-top">
+        <div class="modulo-thumb">
+          <img src="modulo3.jpg" alt="Módulo 3">
+        </div>
+        <div class="modulo-content">
+          <div class="modulo-titulo">T de <em>Treino do Olhar</em></div>
+          <div class="modulo-meta"><span>Módulo 03</span></div>
+          <p class="modulo-texto">O maior segredo da fotografia não está na câmera. Está em como você enxerga o mundo. Nesse módulo você vai aprender a perceber luz, sombra, textura e movimento no cotidiano, mesmo sem o celular na mão. <strong>É o módulo que transforma para sempre a forma como você vê.</strong></p>
+          <button class="btn-toggle" onclick="toggleAulas(this)">
+            Ver aulas <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="modulo-aulas">
+            <div class="aulas-label">Aulas</div>
+            <div class="aulas-linha">Tipos de Luzes - Percebendo a Luz na Prática - Treinar sem Fotografar - Colocando em Prática</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MÓDULO 04 -->
+    <div class="modulo">
+      <div class="modulo-top">
+        <div class="modulo-thumb">
+          <img src="modulo4.jpg" alt="Módulo 4">
+        </div>
+        <div class="modulo-content">
+          <div class="modulo-titulo">E de <em>Edição com Propósito</em></div>
+          <div class="modulo-meta"><span>Módulo 04</span></div>
+          <p class="modulo-texto">Editar não é exagerar. É revelar. Você vai aprender a usar o Lightroom Mobile para fazer ajustes que valorizam a foto sem tirar a sua naturalidade. No final desse módulo você vai ter <strong>sua própria identidade visual, um estilo que é só seu.</strong></p>
+          <button class="btn-toggle" onclick="toggleAulas(this)">
+            Ver aulas <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="modulo-aulas">
+            <div class="aulas-label">Aulas</div>
+            <div class="aulas-linha">Introdução - O que é Lightroom? - Recortes e Abas no Lightroom - Ajustes de Luz no Lightroom - Ajustes de Cor no Lightroom - Ajustes de Desfoque, Textura e Nitidez - Como criar seus Presets e Usar Máscaras - Edição no Lightroom na Prática</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-wrap">
+      <a href="#oferta" class="btn-gold">Quero entrar pro Método ARTE</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SESSÃO 08 ═══ -->
+<section id="edicao">
+  <div class="wrap">
+
+    <h2>Uma boa fotografia tem<br>uma boa <em>edição</em> por trás.</h2>
+    <p class="subtitle">É isso que você vai aprender.</p>
+
+    <div class="slider-container" id="slider">
+
+      <!-- FOTO COMUM (base) -->
+      <img class="img-base" src="edicao1.jpg" alt="Antes da edição">
+
+      <!-- FOTO COM MÉTODO ARTE (overlay) -->
+      <div class="img-overlay-wrap" id="overlay-wrap">
+        <img class="img-overlay" src="edicao2.jpg" alt="Depois da edição">
+      </div>
+
+      <!-- DIVISOR -->
+      <div class="divider" id="divider">
+        <div class="divider-handle">
+          <svg viewBox="0 0 24 24"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3"/></svg>
+        </div>
+      </div>
+
+      <!-- LABELS -->
+      <div class="label label-before" id="label-before">Sem edição</div>
+      <div class="label label-after" id="label-after">Com edição</div>
+
+    </div>
+
+    <p class="hint">&#8592; arraste para revelar &#8594;</p>
+
+  </div>
+</section>
+
+<!-- ═══ SESSÃO 09 ═══ -->
+<section id="garantia">
+  <div class="wrap">
+
+    <div class="selo">
+      <img src="selogarantia.png" alt="Selo de Garantia">
+    </div>
+
+    <h2>15 dias de garantia <em>incondicional</em></h2>
+
+    <p class="garantia-texto">Você pode assistir às aulas, testar o método e praticar com calma.</p>
+
+    <p class="garantia-texto">Se sentir que o curso não é para você, basta pedir reembolso dentro de 15 dias e seu dinheiro será devolvido.</p>
+
+    <div class="divider"></div>
+
+    <p class="garantia-destaque">Ou seja: você pode testar o método <em>sem risco nenhum.</em></p>
+
+  </div>
+</section>
+
+<!-- ═══ SESSÃO 10 ═══ -->
+<section id="oferta">
+  <div class="wrap">
+
+    <h2>Ao entrar no Método ARTE,<br>você <em>recebe:</em></h2>
+    <p class="subtitle">Tudo o que você precisa para aprender a fotografar com o celular e evoluir com prática, técnica e direção.</p>
+
+    <div class="items-grid">
+
+      <div class="item-card">
+        <div class="item-titulo"><span class="check-badge">✓</span> Curso Método ARTE</div>
+        <div class="item-desc">Aulas completas ensinando o método de fotografia com celular.</div>
+        <div class="item-valor">R$297</div>
+      </div>
+
+      <div class="item-card">
+        <div class="item-titulo"><span class="check-badge">✓</span> Presets de edição</div>
+        <div class="item-desc">Filtros profissionais para melhorar suas fotos em menos de 1 minuto.</div>
+        <div class="item-valor">R$47</div>
+      </div>
+
+      <div class="item-card">
+        <div class="item-titulo"><span class="check-badge">✓</span> Comunidade de alunos</div>
+        <div class="item-desc">Espaço para compartilhar fotos, receber feedback e evoluir.</div>
+        <div class="item-valor">R$97</div>
+      </div>
+
+    </div>
+
+    <div class="preco-card">
+      <p class="preco-label">Valor total de tudo isso:</p>
+      <div class="preco-de">R$491</div>
+      <p class="preco-aviso">Mas hoje você não paga esse valor.</p>
+      <p class="preco-convite">Para entrar no Método ARTE, o investimento é de apenas:</p>
+      <div class="preco-por">12x R$20,37</div>
+      <p class="preco-avista">ou à vista por R$197</p>
+      <a href="#" class="btn-gold">Quero entrar no Método ARTE</a>
+      <span class="btn-sub">Acesso imediato após a confirmação do pagamento</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ SESSÃO 11 ═══ -->
+<section id="professor">
+  <div class="wrap">
+
+    <h2>Quem é <em>Eduardo Brito</em></h2>
+
+    <div class="prof-grid">
+
+      <!-- FOTO -->
+      <div>
+        <img src="eduardobrito.jpg" alt="Eduardo Brito" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:6px;display:block;">
+      </div>
+
+      <!-- CONTEÚDO -->
+      <div class="prof-content">
+        <div class="prof-subtitulo">Fotógrafo profissional há mais de 10 anos</div>
+
+        <p class="prof-texto">O criador do Método ARTE é <strong>Eduardo Brito</strong>, fotógrafo profissional há mais de 10 anos. Ao longo da carreira ele já fotografou:</p>
+
+        <div class="esp-grid">
+          <div class="esp-item">Casamentos</div>
+          <div class="esp-item">Eventos</div>
+          <div class="esp-item">Esportes</div>
+          <div class="esp-item">Retratos em estúdio</div>
+          <div class="esp-item">Fotografia gastronômica</div>
+        </div>
+
+        <p class="prof-texto">Além disso, Eduardo é <span class="highlight">Embaixador Internacional da Adobe</span>, uma das maiores empresas de fotografia e edição do mundo.</p>
+
+        <p class="prof-fechamento">Sua abordagem mistura técnica profissional com um olhar artístico, poético e acessível, tornando a fotografia algo simples, prazeroso e possível de aprender.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SESSÃO 12 ═══ -->
+<section id="faq">
+  <div class="wrap">
+
+    <h2>Ainda está com <em>dúvidas?</em></h2>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-pergunta" onclick="toggleFaq(this)">
+          Preciso ter conhecimento prévio em fotografia para fazer o curso?
+          <svg class="faq-icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-resposta">
+          <div class="faq-resposta-inner">Não. O Método ARTE foi criado exatamente para quem nunca estudou fotografia. As aulas começam do zero, explicando cada etapa de forma simples, prática e direta, sempre usando apenas o celular.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-pergunta" onclick="toggleFaq(this)">
+          Meu celular é simples. Vou conseguir acompanhar o curso?
+          <svg class="faq-icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-resposta">
+          <div class="faq-resposta-inner">Sim. O curso não depende de celular caro. O foco está no seu olhar, composição, luz e intenção, que funcionam em qualquer aparelho. Você aprende a extrair o melhor do celular que já tem.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-pergunta" onclick="toggleFaq(this)">
+          O curso é só para quem quer trabalhar com fotografia?
+          <svg class="faq-icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-resposta">
+          <div class="faq-resposta-inner">Não. O Método ARTE é para quem quer fotografar a própria vida com mais intenção. Porém, você pode sim usar os conhecimentos para se tornar um profissional.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-pergunta" onclick="toggleFaq(this)">
+          Vou aprender a editar fotos no celular ou preciso de computador?
+          <svg class="faq-icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-resposta">
+          <div class="faq-resposta-inner">Você aprende a editar 100% no celular, usando o aplicativo Lightroom Mobile. Não precisa de computador e todas as ferramentas do app são explicadas dentro do curso.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-pergunta" onclick="toggleFaq(this)">
+          E se eu comprar e achar que não é para mim?
+          <svg class="faq-icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-resposta">
+          <div class="faq-resposta-inner">Você tem 15 dias de garantia para acessar o curso e decidir com calma. Se não fizer sentido para você, basta solicitar o reembolso dentro do prazo.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-pergunta" onclick="toggleFaq(this)">
+          Posso baixar as aulas?
+          <svg class="faq-icon" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-resposta">
+          <div class="faq-resposta-inner">Sim. Você pode fazer o download das aulas e assistir offline pela plataforma da Hotmart, em qualquer lugar, a qualquer momento.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<script>
+// ── SLIDER HERO (sessão 01) ──
+(function(){
+  const track = document.getElementById('track');
+  const dotsEl = document.getElementById('dots');
+  const wrap = track ? track.closest('.slider-wrap') : null;
+  if(!track || !dotsEl || !wrap) return;
+
+  const slides = Array.from(track.children);
+  const total = slides.length;
+  const getVisible = () => window.innerWidth < 600 ? 1 : 3;
+  const steps = () => Math.max(0, total - getVisible());
+
+  let current = 0;
+  let autoTimer = null;
+  let dragStartX = 0;
+  let dragging = false;
+
+  track.style.transition = 'transform .7s cubic-bezier(.4,0,.2,1)';
+  track.style.willChange = 'transform';
+
+  function getSlideStep(){
+    const slide = slides[0];
+    const styles = getComputedStyle(track);
+    const gap = parseFloat(styles.columnGap || styles.gap || 0) || 0;
+    return slide.getBoundingClientRect().width + gap;
+  }
+
+  function buildDots(){
+    dotsEl.innerHTML = '';
+    for(let i = 0; i <= steps(); i++){
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === current ? ' active' : '');
+      d.addEventListener('click', () => { goTo(i); resetAuto(); });
+      dotsEl.appendChild(d);
+    }
+  }
+
+  function goTo(n){
+    current = Math.max(0, Math.min(n, steps()));
+    track.style.transition = 'transform .7s cubic-bezier(.4,0,.2,1)';
+    track.style.transform = 'translate3d(-' + (current * getSlideStep()) + 'px,0,0)';
+    dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === current));
+  }
+
+  function resetAuto(){
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => goTo((current + 1) % (steps() + 1)), 3200);
+  }
+
+  wrap.addEventListener('mousedown', e => {
+    dragging = true;
+    dragStartX = e.clientX;
+  });
+
+  wrap.addEventListener('touchstart', e => {
+    dragging = true;
+    dragStartX = e.touches[0].clientX;
+  }, {passive:true});
+
+  window.addEventListener('mouseup', e => {
+    if(!dragging) return;
+    dragging = false;
+    const diff = dragStartX - e.clientX;
+    if(Math.abs(diff) > 40){
+      goTo(diff > 0 ? current + 1 : current - 1);
+    }else{
+      goTo(current);
+    }
+    resetAuto();
+  });
+
+  window.addEventListener('touchend', e => {
+    if(!dragging) return;
+    dragging = false;
+    const diff = dragStartX - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 40){
+      goTo(diff > 0 ? current + 1 : current - 1);
+    }else{
+      goTo(current);
+    }
+    resetAuto();
+  });
+
+  // setas
+  const prevBtn = document.getElementById('heroPrev');
+  const nextBtn = document.getElementById('heroNext');
+  function updateArrows(){
+    if(prevBtn) prevBtn.disabled = current <= 0;
+    if(nextBtn) nextBtn.disabled = current >= steps();
+  }
+  const _goTo = goTo;
+  goTo = function(n){ _goTo(n); updateArrows(); };
+  if(prevBtn) prevBtn.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
+  if(nextBtn) nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+
+  buildDots();
+  goTo(0);
+  resetAuto();
+
+  window.addEventListener('resize', () => {
+    current = 0;
+    buildDots();
+    goTo(0);
+  });
+})();
+
+// ── CARROSSEL DEPOIMENTOS (sessão 05) ──
+(function(){
+  const wrap = document.querySelector('#depoimentos .carousel-track');
+  const dotsEl = document.querySelector('#depoimentos .carousel-dots');
+  if(!wrap || !dotsEl) return;
+  const cards = Array.from(wrap.children);
+  const total = cards.length;
+  function getVisible(){ return window.innerWidth < 768 ? 1 : 3; }
+  let current = 0;
+  const steps = () => total - getVisible();
+  for(let i = 0; i <= steps(); i++){
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  }
+  function goTo(n){
+    current = Math.max(0, Math.min(n, steps()));
+    const cardW = cards[0].getBoundingClientRect().width + 20;
+    wrap.style.transform = 'translateX(-' + (current * cardW) + 'px)';
+    dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === current));
+  }
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  if(prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1));
+  if(nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1));
+  setInterval(() => goTo(current >= steps() ? 0 : current + 1), 3500);
+  window.addEventListener('resize', () => goTo(0));
+})();
+
+// ── SLIDER ANTES/DEPOIS (sessão 06) ──
+(function(){
+  const slider = document.getElementById('slider');
+  if(!slider) return;
+  const overlayWrap = document.getElementById('overlay-wrap');
+  const dividerEl = document.getElementById('divider');
+  const labelBefore = document.getElementById('label-before');
+  const labelAfter = document.getElementById('label-after');
+  let dragging = false;
+  function setPosition(p){
+    const pct = Math.max(2, Math.min(98, p));
+    overlayWrap.style.width = pct + '%';
+    dividerEl.style.left = pct + '%';
+    labelBefore.classList.toggle('visible', pct < 20);
+    labelAfter.classList.toggle('visible', pct > 80);
+  }
+  function getPercent(e){
+    const rect = slider.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    return (x / rect.width) * 100;
+  }
+  slider.addEventListener('mousedown', e => { dragging = true; setPosition(getPercent(e)); });
+  slider.addEventListener('touchstart', e => { dragging = true; setPosition(getPercent(e)); }, {passive:true});
+  window.addEventListener('mousemove', e => { if(dragging) setPosition(getPercent(e)); });
+  window.addEventListener('touchmove', e => { if(dragging) setPosition(getPercent(e)); }, {passive:true});
+  window.addEventListener('mouseup', () => dragging = false);
+  window.addEventListener('touchend', () => dragging = false);
+  setPosition(50);
+})();
+
+// ── SLIDER EDIÇÃO (sessão 08) ──
+(function(){
+  const slider = document.querySelector('#edicao .slider-container');
+  if(!slider) return;
+  const overlayWrap = slider.querySelector('.img-overlay-wrap');
+  const dividerEl = slider.querySelector('.divider');
+  const labelBefore = slider.querySelector('.label-before');
+  const labelAfter = slider.querySelector('.label-after');
+  let dragging = false;
+  function setPosition(p){
+    const pct = Math.max(2, Math.min(98, p));
+    overlayWrap.style.width = pct + '%';
+    dividerEl.style.left = pct + '%';
+    labelBefore.classList.toggle('visible', pct < 20);
+    labelAfter.classList.toggle('visible', pct > 80);
+  }
+  function getPercent(e){
+    const rect = slider.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    return (x / rect.width) * 100;
+  }
+  slider.addEventListener('mousedown', e => { dragging = true; setPosition(getPercent(e)); });
+  slider.addEventListener('touchstart', e => { dragging = true; setPosition(getPercent(e)); }, {passive:true});
+  window.addEventListener('mousemove', e => { if(dragging) setPosition(getPercent(e)); });
+  window.addEventListener('touchmove', e => { if(dragging) setPosition(getPercent(e)); }, {passive:true});
+  window.addEventListener('mouseup', () => dragging = false);
+  window.addEventListener('touchend', () => dragging = false);
+  setPosition(50);
+})();
+
+// ── MÓDULOS VER AULAS (sessão 07) ──
+function toggleAulas(btn){
+  const aulas = btn.nextElementSibling;
+  const aberto = aulas.classList.toggle('visivel');
+  btn.classList.toggle('aberto', aberto);
+  btn.childNodes[0].textContent = aberto ? ' Ver menos ' : ' Ver aulas ';
+  // expandir texto do módulo
+  const content = btn.closest('.modulo-content');
+  if(content) content.classList.toggle('expandido', aberto);
+}
+
+// ── FAQ (sessão 12) ──
+function toggleFaq(btn){
+  const item = btn.closest('.faq-item');
+  item.classList.toggle('aberto');
+}
+</script>
+
+<style>
+/* AJUSTE FINAL DOS CARDS DA OFERTA — igual ao print */
+.items-grid{
+  align-items:stretch !important;
+}
+
+.item-card{
+  display:flex !important;
+  flex-direction:column !important;
+  min-height:234px !important;
+  padding:28px 24px !important;
+}
+
+.item-titulo{
+  display:grid !important;
+  grid-template-columns:1fr auto !important;
+  align-items:start !important;
+  column-gap:14px !important;
+  min-height:48px !important;
+  margin-bottom:20px !important;
+  line-height:1.25 !important;
+}
+
+.check-badge{
+  order:initial !important;
+  margin:2px 0 0 0 !important;
+  justify-self:end !important;
+  align-self:start !important;
+}
+
+.item-desc{
+  margin-bottom:20px !important;
+}
+
+.item-valor{
+  margin-top:auto !important;
+  padding-top:18px !important;
+}
+</style>
+
+
+<style>
+/* OFERTA — cards iguais ao print enviado */
+#oferta .items-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,1fr) !important;
+  gap:12px !important;
+  align-items:stretch !important;
+}
+
+#oferta .item-card{
+  background:#202020 !important;
+  border:1px solid rgba(255,255,255,0.08) !important;
+  border-radius:7px !important;
+  padding:26px 24px 24px !important;
+  min-height:234px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  text-align:left !important;
+}
+
+#oferta .item-titulo{
+  display:grid !important;
+  grid-template-columns:1fr auto !important;
+  column-gap:12px !important;
+  align-items:start !important;
+  min-height:44px !important;
+  margin-bottom:20px !important;
+  font-size:15px !important;
+  font-weight:800 !important;
+  line-height:1.22 !important;
+  color:#f0ece4 !important;
+}
+
+#oferta .check-badge{
+  width:18px !important;
+  height:18px !important;
+  min-width:18px !important;
+  border-radius:50% !important;
+  background:#27ae60 !important;
+  color:#fff !important;
+  font-size:10px !important;
+  font-weight:700 !important;
+  margin:2px 0 0 8px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  justify-self:end !important;
+  align-self:start !important;
+  order:initial !important;
+}
+
+#oferta .item-desc{
+  font-size:13px !important;
+  font-weight:300 !important;
+  line-height:1.65 !important;
+  color:#9a9088 !important;
+  margin:0 0 20px !important;
+}
+
+#oferta .item-valor{
+  margin-top:auto !important;
+  padding-top:18px !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  color:#f5c04a !important;
+}
+
+@media(max-width:680px){
+  #oferta .items-grid{
+    grid-template-columns:1fr !important;
+  }
+}
+</style>
+
+
+<style>
+/* AJUSTE — seção Quem é Eduardo Brito */
+#professor .prof-grid{
+  align-items:stretch !important;
+}
+
+#professor .prof-foto-placeholder{
+  height:100% !important;
+  min-height:520px;
+}
+
+#professor .prof-content{
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  height:100% !important;
+}
+
+#professor .prof-texto{
+  font-size:15px !important;
+  line-height:1.72 !important;
+  margin-bottom:14px !important;
+}
+
+#professor .prof-subtitulo{
+  margin-bottom:22px !important;
+}
+
+#professor .esp-grid{
+  margin-bottom:18px !important;
+}
+
+#professor .prof-fechamento{
+  font-size:15px !important;
+  line-height:1.72 !important;
+}
+
+@media(max-width:768px){
+  #professor .prof-foto-placeholder{
+    height:auto !important;
+    min-height:0 !important;
+  }
+
+  #professor .prof-content{
+    height:auto !important;
+    justify-content:flex-start !important;
+  }
+}
+</style>
+
+
+<style>
+/* REFINAMENTO — seção Quem é Eduardo Brito */
+#professor{
+  padding:90px 24px 95px !important;
+}
+
+#professor .wrap{
+  max-width:1120px !important;
+}
+
+#professor h2{
+  margin-bottom:56px !important;
+}
+
+#professor .prof-grid{
+  grid-template-columns:minmax(0,1.18fr) minmax(360px,.82fr) !important;
+  gap:56px !important;
+  align-items:center !important;
+}
+
+#professor .prof-foto-placeholder{
+  height:auto !important;
+  min-height:0 !important;
+  aspect-ratio:4/5 !important;
+  max-height:640px !important;
+  border-radius:10px !important;
+  background:linear-gradient(145deg,#181818,#101010) !important;
+}
+
+#professor .prof-content{
+  height:auto !important;
+  justify-content:flex-start !important;
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:10px;
+  padding:34px 34px 36px;
+}
+
+#professor .prof-subtitulo{
+  color:#c9a96e !important;
+  font-size:12px !important;
+  line-height:1.45 !important;
+  letter-spacing:3px !important;
+  margin-bottom:24px !important;
+}
+
+#professor .prof-texto{
+  font-size:15.5px !important;
+  line-height:1.78 !important;
+  margin-bottom:18px !important;
+}
+
+#professor .esp-grid{
+  grid-template-columns:1fr 1fr !important;
+  gap:12px 22px !important;
+  margin:22px 0 26px !important;
+}
+
+#professor .esp-item{
+  font-size:14px !important;
+  line-height:1.45 !important;
+}
+
+#professor .prof-fechamento{
+  font-size:15.5px !important;
+  line-height:1.78 !important;
+  padding-left:22px !important;
+  margin-top:8px !important;
+}
+
+@media(max-width:900px){
+  #professor .prof-grid{
+    grid-template-columns:1fr !important;
+    gap:32px !important;
+  }
+
+  #professor .prof-foto-placeholder{
+    max-height:none !important;
+  }
+
+  #professor .prof-content{
+    padding:28px 24px 30px !important;
+  }
+}
+
+@media(max-width:520px){
+  #professor{
+    padding:72px 20px 80px !important;
+  }
+
+  #professor .esp-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  #professor .prof-content{
+    padding:24px 20px 26px !important;
+  }
+}
+</style>
+
+
+<script>
+// Carrossel de depoimentos: uma imagem por vez, 9x16, com fallback de extensão
+(function(){
+  const section = document.querySelector('#depoimentos.depoimentos-carousel-single');
+  if(!section) return;
+
+  const imgs = section.querySelectorAll('.depoimento-carousel-img');
+  const exts = ['JPG','jpg','jpeg','png','webp','JPEG','PNG','WEBP'];
+  imgs.forEach(img => {
+    let index = 0;
+    const base = img.dataset.base;
+    img.onerror = function(){
+      index += 1;
+      if(index < exts.length){
+        this.src = base + '.' + exts[index];
+      }else{
+        this.onerror = null;
+      }
+    };
+  });
+
+  const track = section.querySelector('.depo-track');
+  const slides = Array.from(section.querySelectorAll('.depo-slide'));
+  const prev = section.querySelector('.depo-prev');
+  const next = section.querySelector('.depo-next');
+  const dotsWrap = section.querySelector('.depo-dots');
+  if(!track || !slides.length) return;
+
+  let current = 0;
+  let timer = null;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'depo-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Ver depoimento ' + (i + 1));
+    dot.addEventListener('click', () => {
+      goTo(i);
+      resetTimer();
+    });
+    dotsWrap.appendChild(dot);
+  });
+
+  function goTo(index){
+    current = (index + slides.length) % slides.length;
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+    dotsWrap.querySelectorAll('.depo-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === current);
+    });
+  }
+
+  function resetTimer(){
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 4500);
+  }
+
+  if(prev) prev.addEventListener('click', () => { goTo(current - 1); resetTimer(); });
+  if(next) next.addEventListener('click', () => { goTo(current + 1); resetTimer(); });
+
+  resetTimer();
+})();
+</script>
+
+</body>
+</html>
+<style>
+.item-titulo{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  min-height:48px !important;
+}
+
+.check-badge{
+  order:2 !important;
+  margin-right:0 !important;
+  margin-left:8px !important;
+  flex-shrink:0 !important;
+}
+
+/* Reduz espaço entre headline e subheadline */
+.hero-headline{
+  margin-bottom:14px !important;
+}
+
+.hero-sub{
+  margin:0 auto 12px !important;
+}
+</style>
+
